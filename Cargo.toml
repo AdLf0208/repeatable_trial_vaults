@@ -1,0 +1,20 @@
+[package]
+name = "horizon-repeatable-trial-vaults"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT OR CC0-1.0"
+description = "Repeatable Trial Vaults for Horizon: a trial key resets a vault that already rewarded the player"
+# Ported from: Repeatable Trial Vaults 1.0.3 (Buuz135/Repeatable-Trial-Vaults,
+# MIT per gradle.properties; the repository ships the CC0-1.0 text), Minecraft
+# Java 1.21.1 NeoForge/Fabric.
+# LOCAL-ONLY until the licence allows derivatives and the maintainer approves
+# publishing (ARCHITECTURE.md §8).
+
+[lib]
+# This exact source is also injected as a same-crate module by horizon-mixins.
+path = "mixins/repeatable_trial_vaults/runtime.rs"
+
+[workspace]
+members = ["tools/audit"]
+resolver = "2"

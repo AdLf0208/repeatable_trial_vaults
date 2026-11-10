@@ -1,0 +1,67 @@
+[mod]
+id = "repeatable_trial_vaults"
+version = "0.1.0"
+priority = 100
+
+[compatibility]
+horizon_revision = "1d63e0a5a37a7a708eb0b32b49bf0dfeb28ed8a9"
+
+# The content half is inside this bundle (`data/repeatable_trial_vaults-content.hmod`, the built
+# `content/repeatable_trial_vaults.hmod`): this writes it to `.horizon-cache/` and appends it to
+# the dev-mod list, so one `.hnmod` installs the tag/lang and the code. The registry keeps one
+# file per project, so a split port could not be listed; AE2 ships the same pattern
+# (`docs/native-mods.md`, "Data files").
+[[injection]]
+id = "embedded-content"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::mods::content_root"
+helper = "embedded_content.rs"
+bindings = [
+  { name = "root", ty = "&std::path::Path", value = "root" },
+  { name = "enabled", ty = "&std::collections::BTreeSet<String>", value = "enabled" },
+  { name = "dev", ty = "&[std::path::PathBuf]", value = "dev" },
+]
+
+# The pure reset rules (standalone crate lib, injected as
+# `crate::game::repeatable_trial_vaults`).
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "repeatable_trial_vaults"
+source = "runtime.rs"
+
+# Game-side glue: the vault block-entity reset and the key tooltip line. It
+# needs the game, so it is not part of the standalone library.
+[[module]]
+id = "state"
+file = "crates/horizon-client/src/game.rs"
+name = "repeatable_trial_vaults_state"
+source = "support.rs"
+
+# A trial key on a vault that already rewarded the acting player resets the
+# vault's server data (API 21, before the block's own use).
+[[injection]]
+id = "reset-vault"
+hook = "right_click_block"
+hook_version = 1
+kind = "HEAD"
+helper = "right_click_block.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "pos", ty = "[i32; 3]", value = "pos" },
+  { name = "canceled", ty = "&mut bool", value = "canceled" },
+]
+
+# A reset key says so in its tooltip (API 12, client side).
+[[injection]]
+id = "key-tooltip"
+hook = "tooltip"
+hook_version = 1
+kind = "HEAD"
+helper = "tooltip.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+  { name = "stack", ty = "&horizon_client::items::ItemStack", value = "stack" },
+  { name = "lines", ty = "&mut Vec<(Text, u32)>", value = "lines" },
+]

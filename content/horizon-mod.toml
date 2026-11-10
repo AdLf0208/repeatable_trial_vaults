@@ -1,0 +1,14 @@
+# Port-owned content mod for the Repeatable Trial Vaults port (upstream 1.0.3)
+# (Buuz135/Repeatable-Trial-Vaults, MIT per gradle.properties / CC0-1.0 per
+# the repository's LICENSE). The tag and the lang entry are the upstream mod's
+# own data, carried byte for byte; see ../FINDINGS.md and ../notes.md.
+# The version is the *port's* version, not upstream's (AGENT_PLAYBOOK §1.7):
+# this is the first partial port, so 0.1.0.
+id = "repeatable_trial_vaults"
+name = "Repeatable Trial Vaults"
+version = "0.1.0"
+description = "Consume a key to be able to use another trial vault"
+authors = ["Buuz135"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]
