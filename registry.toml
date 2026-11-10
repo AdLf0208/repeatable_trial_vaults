@@ -1,0 +1,49 @@
+id = "repeatable_trial_vaults"
+kind = "native-mod"
+name = "repeatable_trial_vaults"
+summary = "A Horizon port of repeatable_trial_vaults."
+description = """
+A port of [repeatable_trial_vaults](Buuz135/Repeatable-Trial-Vaults) for Horizon.
+
+**Implemented so far**
+
+- A right-click on a `minecraft:vault` with `minecraft:trial_key` or
+- `minecraft:ominous_trial_key` resets it **iff** the acting player's UUID is in
+- `rewarded_players`. The click is cancelled (the block never sees it), the
+- held stack loses the vault config's key count (normally 1; a keyless vault
+- consumes 0; `consume_held` skips creative like `ItemStack.consume`), the
+- `used` stat is awarded once, and the hand swings.
+- The reset is allowed whatever the vault's `vault_state` is (upstream checks
+- no state). The vault's own tick then sees the player as unrewarded and moves
+
+**Not yet ported**
+
+- No native API to read or write a vanilla block entity.** The port reaches
+- `Game.world.block_entities` and `Vault.rewarded_players` directly (see the
+- probe). It is a pin-internal dependency; a future pin can move either. Issue:
+- "a native read/write hook for a vanilla block entity's saved NBT (or at
+- least the vault's `rewarded_players`), so content-logic mods do not pin the
+- engine's internal maps".
+- The item tag cannot be read where the port runs.** `native_item_in_tag`
+- and `native_server_item_in_tag` return `NotServer` on a client execution
+
+Original copyright and licence notices are kept in this repository. Pinned to
+Horizon 1d63e0a and horizon-mixins 5a64af93. Help with the remaining slices is
+welcome.
+"""
+authors = ["AdLf0208"]
+owners = ["AdLf0208"]
+owner_ids = [107615167]
+license = "MIT"
+source = "https://github.com/AdLf0208/repeatable_trial_vaults"
+icon = "icons/repeatable_trial_vaults.png"
+categories = ["utility"]
+tags = ["port", "horizon"]
+
+[[versions]]
+version = "1.0.3"
+published = "2026-11-10"
+game = "26.3"
+file = "repeatable_trial_vaults.hnmod"
+sha256 = "0b4ee88ab378cf37755d5bdea07171d1931fe27b5eb733e32f6a80a614aaaf7c"
+changelog = "First release"
